@@ -1,0 +1,40 @@
+name: Deploy to Amazon EKS
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    # Install AWS CLI
+    - name: Install AWS CLI
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y awscli
+
+    # Configure AWS CLI
+    - name: Configure AWS CLI
+      run: |
+        aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws configure set default.region ap-south-1 # Change this to your region
+
+    # Build Docker image
+    - name: Build Docker image
+      run: |
+        docker build ./app --file ./app/Dockerfile --tag rudrasaxena69/myflaskapp:latest
+        aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 381491967947.dkr.ecr.ap-south-1.amazonaws.com
+        docker tag rudrasaxena69/myflask:latest 381491967947.dkr.ecr.ap-south-1.amazonaws.com/rudrasaxena69/myflaskapp:latest
+        docker push 381491967947.dkr.ecr.ap-south-1.amazonaws.com/rudrasaxena69/myflaskapp:latest
+
+    # Deploy to Amazon EKS
+    - name: Deploy to Amazon EKS
+      run: |
+        kubectl apply -f deployment.yaml
