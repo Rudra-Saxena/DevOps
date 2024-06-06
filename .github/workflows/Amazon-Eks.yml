@@ -41,7 +41,15 @@ jobs:
         --name myflaskcluster \
         --role-arn arn:aws:iam::381491967947:role/aws-service-role/eks.amazonaws.com/AWSServiceRoleForAmazonEKS \
         --resources-vpc-config subnetIds=subnet-0712e635b6f9f11da,subnet-0aaa64042fbf47e35,securityGroupIds=sg-0b62b07d6711b3eb6
-    
+
+    - name: Wait until cluster is created
+      run: |
+        status="CREATING"
+        while [ "$status" != "ACTIVE" ]; do
+          sleep 30
+          status=$(aws eks --region ap-south-1 describe-cluster --name myflaskcluster --query 'cluster.status' --output text)
+          echo "Cluster status: $status"
+        done
 
     # Deploy to Amazon EKS
     - name: Deploy to Amazon EKS
