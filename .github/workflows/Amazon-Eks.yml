@@ -33,12 +33,14 @@ jobs:
         aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 381491967947.dkr.ecr.ap-south-1.amazonaws.com
         docker tag myflaskapp:latest 381491967947.dkr.ecr.ap-south-1.amazonaws.com/myflaskapp:latest
         docker push 381491967947.dkr.ecr.ap-south-1.amazonaws.com/myflaskapp:latest
+
         
     - name: Create EKS Cluster
       run: |
         aws eks --region ap-south-1 create-cluster \
         --name myflaskcluster \
         --role-arn arn:aws:iam::381491967947:role/aws-service-role/eks.amazonaws.com/AWSServiceRoleForAmazonEKS \
+        --resources-vpc-config subnetIds=subnet-0712e635b6f9f11da,securityGroupIds=sg-0b62b07d6711b3eb6
             
     - name: Configure kubectl
       run: |
