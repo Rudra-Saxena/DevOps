@@ -29,7 +29,7 @@ jobs:
     # Build Docker image
     - name: Build Docker image
       run: |
-        docker build -t rudrasaxena69/myflaskapp:latest .
+        docker build ./app --file ./app/Dockerfile --tag rudrasaxena69/myflaskapp:latest
         aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 381491967947.dkr.ecr.ap-south-1.amazonaws.com
         docker tag rudrasaxena69/myflask:latest 381491967947.dkr.ecr.ap-south-1.amazonaws.com/rudrasaxena69/myflaskapp:latest
         docker push 381491967947.dkr.ecr.ap-south-1.amazonaws.com/rudrasaxena69/myflaskapp:latest
