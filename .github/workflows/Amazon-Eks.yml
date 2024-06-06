@@ -34,7 +34,10 @@ jobs:
         docker tag myflaskapp:latest 381491967947.dkr.ecr.ap-south-1.amazonaws.com/myflaskapp:latest
         docker push 381491967947.dkr.ecr.ap-south-1.amazonaws.com/myflaskapp:latest
 
-    # Deploy to Amazon EKS
+    - name: Configure kubectl
+      run: |
+        aws eks --region ap-south-1 update-kubeconfig --name myflaskcluster
+
     - name: Deploy to Amazon EKS
       run: |
-        kubectl apply -f app/Deployment.yaml --validate=false
+        kubectl apply -f app/Deployment.yaml 
