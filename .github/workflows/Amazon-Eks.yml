@@ -40,7 +40,7 @@ jobs:
         aws eks --region ap-south-1 create-cluster \
         --name myflaskcluster \
         --role-arn arn:aws:iam::381491967947:role/aws-service-role/eks.amazonaws.com/AWSServiceRoleForAmazonEKS \
-        --resources-vpc-config subnetIds=subnet-0712e635b6f9f11da,securityGroupIds=sg-0b62b07d6711b3eb6
+        --resources-vpc-config subnetIds=${{subnet-0712e635b6f9f11da,subnet-0aaa64042fbf47e35}},securityGroupIds=sg-0b62b07d6711b3eb6
             
     - name: Configure kubectl
       run: |
