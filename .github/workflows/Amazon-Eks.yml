@@ -38,4 +38,4 @@ jobs:
     # Deploy to Amazon EKS
     - name: Deploy to Amazon EKS
       run: |
-        kubectl apply -f deployment.yaml
+        kubectl apply -f app/deployment.yaml
