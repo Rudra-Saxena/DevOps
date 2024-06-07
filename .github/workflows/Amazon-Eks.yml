@@ -52,7 +52,11 @@ jobs:
         done
 
     # Deploy to Amazon EKS
+    - name: Configure kubectl
+      run: |
+        aws eks --region ap-south-1 update-kubeconfig --name myflaskcluster
+      
     - name: Deploy to Amazon EKS
       run: |
         kubectl apply -f app/Deployment.yaml
-        aws eks --region ap-south-1 update-kubeconfig --name myflaskcluster
+        kubectl apply -f app/Service.yml
