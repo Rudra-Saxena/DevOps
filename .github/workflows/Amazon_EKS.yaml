@@ -46,10 +46,12 @@ jobs:
           status=$(aws eks --region ap-south-1 describe-cluster --name myflaskcluster --query 'cluster.status' --output text)
           echo "Cluster status: $status"
         done
+        
     # Deploy to Amazon EKS
     - name: Configure kubectl
       run: |
         aws eks --region ap-south-1 update-kubeconfig --name myflaskcluster
+        kubectl cluster info
       
     - name: Deploy to Amazon EKS
       run: |
